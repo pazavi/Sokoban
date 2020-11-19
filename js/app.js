@@ -87,6 +87,7 @@ function buildBoard() {
     board[8][7].type = WALL;
     board[7][7].type = WALL;
     board[6][5].type = WALL;
+    board[3][9].type = WALL;
 
     board[4][3].type = TARGET;
     board[8][9].type = TARGET;
