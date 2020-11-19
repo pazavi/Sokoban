@@ -6,6 +6,7 @@ const GAMER = 'GAMER';
 const TARGET = 'TARGET';
 const CLOCK = 'CLOCK';
 const GOLD = 'CLOCK';
+const GLUE = 'GLUE';
 
 
 
@@ -13,6 +14,8 @@ const GAMER_IMG = '<img src="img/gamer-purple.png" />';
 const BOX_IMG = '<img src="img/box.jpg" />';
 const CLOCK_IMG = '<img src="img/clock.png" />';
 const GOLD_IMG = '<img src="img/gold.png" />';
+const GLUE_IMG = '<img src="img/glue.png" />';
+
 
 
 
@@ -21,12 +24,15 @@ var gStepsCount;
 var gClockInterval;
 var gMagnetInterval;
 var gGoldInterval;
+var gGlueInterval;
+var gScore;
 
 
 var gBoard;
 var gGamerPos;
 var gBoxPos = { i: 0, j: 0 };
 var gIsGameOn;
+var gIsGlue = false;
 
 function initGame() {
     clearAllItntervals()
@@ -38,8 +44,9 @@ function initGame() {
     renderBoard(gBoard);
     gClockInterval= setInterval(summonClockAtRandPos, 10000);
     gGoldInterval= setInterval(summonGoldAtRandPos, 10000);
+    gGlueInterval = setInterval(summonGlueAtRandPos, 10000);
     
-    document.querySelector('.steps').innerHTML = 'Steps: <span>0</span>';
+    document.querySelector('.steps').innerHTML = 'Score: <span>0</span>';
 
 }
 
@@ -117,6 +124,10 @@ function renderBoard(board) {
                 strHTML += BOX_IMG;
             }else if (currCell.gameElement === CLOCK) {
                 strHTML += CLOCK_IMG;
+            }else if (currCell.gameElement === GOLD) {
+                strHTML += GOLD_IMG;
+            }else if (currCell.gameElement === GLUE) {
+                strHTML += GLUE_IMG;
             }
 
             strHTML += '\t</td>\n';
@@ -130,6 +141,7 @@ function renderBoard(board) {
 
 function moveTo(i, j, direction) {
     if (gIsGameOn === false) return;
+    if (gIsGlue === true)return;
 
 
     if (!direction) {
@@ -183,37 +195,39 @@ function moveTo(i, j, direction) {
             renderCell(gBoxPos, BOX_IMG);
         }
         if (targetCell.gameElement === CLOCK){
-            gStepsCount -= 11;
+            gStepsCount -= 10;
+            
 
         }
         if (targetCell.gameElement === GOLD){
-            gStepsCount -= 101;
+            gStepsCount += 100;
+
+        }
+        if (targetCell.gameElement === GLUE){
+            gStepsCount += 5;
+         
+            gIsGlue = true;
 
         }
 
 
         gStepsCount++
         document.querySelector('.steps span').innerText = gStepsCount;
-
-        // MOVING from current position
-        // Model:
+      
         gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
-        // Dom:
+
         renderCell(gGamerPos, '');
 
-        // MOVING to selected position
-        // Model:
+
         gGamerPos.i = i;
         gGamerPos.j = j;
-        gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
-        // DOM:
+
         renderCell(gGamerPos, GAMER_IMG);
 
     }
 
 }
 
-// Convert a location object {i, j} to a selector and render a value in that element
 function renderCell(location, value) {
     var cellSelector = '.' + getClassName(location)
     var elCell = document.querySelector(cellSelector);
@@ -268,6 +282,7 @@ function undo() {
 function clearAllItntervals(){
     clearInterval(gClockInterval);
     clearInterval(gGoldInterval);
+    clearInterval(gGlueInterval)
 
 }
 

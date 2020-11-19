@@ -26,16 +26,21 @@ function summonGoldAtRandPos(){
     }
 }
 
-function summonInnerWalls(){
+function summonGlueAtRandPos(){
     var emptyCoord = getRandEmptyCell();
     if (emptyCoord) {
-        gBoard[emptyCoord.i][emptyCoord.j].type = WALL;
-        renderCell(emptyCoord, WALL);
+        gBoard[emptyCoord.i][emptyCoord.j].gameElement = GLUE;
+        renderCell(emptyCoord, GLUE_IMG);
+        
+        setTimeout(function() {
+            gBoard[emptyCoord.i][emptyCoord.j].gameElement = null;
+            renderCell(emptyCoord, '');
+            gIsGlue = false;
+            
+        }, 5000);
     }
-
-
-
 }
+
 
 function getRandEmptyCell() {
      

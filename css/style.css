@@ -19,8 +19,9 @@ table {
 .steps {
     font-family: 'Armata'; 
     width: 528px; 
-    height: 28px; 
-    margin: 0 auto; 
+    height: 28px;
+    display: block; 
+    margin: auto; 
     margin-bottom: 20px; 
     text-align: center; 
     font-size: 22px; 
@@ -29,6 +30,24 @@ table {
 }
 
 .steps span {
+    color:white;
+}
+
+.score {
+    font-family: 'Armata'; 
+    width: 528px; 
+    height: 28px;
+    display: block;
+
+    margin: auto; 
+    margin-bottom: 20px; 
+    text-align: center; 
+    font-size: 22px; 
+    color:  #A5A529; 
+    background-color: black;
+}
+
+.score span {
     color:white;
 }
 
