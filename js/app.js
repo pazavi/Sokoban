@@ -7,6 +7,7 @@ const TARGET = 'TARGET';
 const CLOCK = 'CLOCK';
 const GOLD = 'CLOCK';
 const GLUE = 'GLUE';
+const MAGNET = 'MAGNET';
 
 
 
@@ -15,17 +16,15 @@ const BOX_IMG = '<img src="img/box.jpg" />';
 const CLOCK_IMG = '<img src="img/clock.png" />';
 const GOLD_IMG = '<img src="img/gold.png" />';
 const GLUE_IMG = '<img src="img/glue.png" />';
+const MAGNET_IMG = '<img src="img/magnet.png" />';
 
 
-
-
-var gPrevSteps = [];
 var gStepsCount;
 var gClockInterval;
 var gMagnetInterval;
 var gGoldInterval;
 var gGlueInterval;
-var gScore;
+var gPrevSteps = [];
 
 
 var gBoard;
@@ -33,6 +32,7 @@ var gGamerPos;
 var gBoxPos = { i: 0, j: 0 };
 var gIsGameOn;
 var gIsGlue = false;
+var gIsMagnet = false;
 
 function initGame() {
     clearAllItntervals()
@@ -42,10 +42,11 @@ function initGame() {
     gGamerPos = { i: 2, j: 9 };
     gBoard = buildBoard();
     renderBoard(gBoard);
-    gClockInterval= setInterval(summonClockAtRandPos, 10000);
-    gGoldInterval= setInterval(summonGoldAtRandPos, 10000);
-    gGlueInterval = setInterval(summonGlueAtRandPos, 10000);
-    
+    gClockInterval = setInterval(summonClockAtRandPos, 10000);
+    gGoldInterval = setInterval(summonGoldAtRandPos, 12000);
+    gMagnetInterval = setInterval(summonMagnetAtRandPos, 15000);
+    gGlueInterval = setInterval(summonGlueAtRandPos, 11000);
+
     document.querySelector('.steps').innerHTML = 'Score: <span>0</span>';
 
 }
@@ -92,8 +93,6 @@ function buildBoard() {
     board[7][2].type = TARGET;
     board[1][6].type = TARGET;
 
-
-
     // console.log(board);
     return board;
 }
@@ -122,12 +121,14 @@ function renderBoard(board) {
                 strHTML += GAMER_IMG;
             } else if (currCell.gameElement === BOX) {
                 strHTML += BOX_IMG;
-            }else if (currCell.gameElement === CLOCK) {
+            } else if (currCell.gameElement === CLOCK) {
                 strHTML += CLOCK_IMG;
-            }else if (currCell.gameElement === GOLD) {
+            } else if (currCell.gameElement === GOLD) {
                 strHTML += GOLD_IMG;
-            }else if (currCell.gameElement === GLUE) {
+            } else if (currCell.gameElement === GLUE) {
                 strHTML += GLUE_IMG;
+            } else if (currCell.gameElement === MAGNET) {
+                strHTML += MAGNET_IMG;
             }
 
             strHTML += '\t</td>\n';
@@ -141,9 +142,9 @@ function renderBoard(board) {
 
 function moveTo(i, j, direction) {
     if (gIsGameOn === false) return;
-    if (gIsGlue === true)return;
+    if (gIsGlue === true) return;
 
-
+    //for onclick
     if (!direction) {
         if (i > gGamerPos.i) direction = 'down';
         if (i < gGamerPos.i) direction = 'up';
@@ -154,8 +155,6 @@ function moveTo(i, j, direction) {
 
     var iAbsDiff = Math.abs(i - gGamerPos.i);
     var jAbsDiff = Math.abs(j - gGamerPos.j);
-
-
 
     if ((iAbsDiff === 1 && jAbsDiff === 0) || (jAbsDiff === 1 && iAbsDiff === 0)) {
 
@@ -169,9 +168,11 @@ function moveTo(i, j, direction) {
                 gBoxPos.i = i;
                 gBoxPos.j = j - 1;
 
-
+                // if (gBoard[gGamerPos.i][gGamerPos.j + 2].type === WALL && gBoard[gGamerPos.i][gGamerPos.j + 1].gameElement === BOX && gIsMagnet ===true);
+                // gBoxPos.i = i;
+                // gBoxPos.j = j - 1;
+                // gIsMagnet ===false;
             }
-
             if (direction === 'right') {
                 if (gBoard[i][j + 1].type === WALL || gBoard[i][j + 1].gameElement === BOX) return;
                 gBoxPos.i = i;
@@ -194,30 +195,27 @@ function moveTo(i, j, direction) {
             gBoard[gBoxPos.i][gBoxPos.j].gameElement = BOX;
             renderCell(gBoxPos, BOX_IMG);
         }
-        if (targetCell.gameElement === CLOCK){
+        if (targetCell.gameElement === CLOCK) {
             gStepsCount -= 10;
-            
 
         }
-        if (targetCell.gameElement === GOLD){
+        if (targetCell.gameElement === GOLD) {
             gStepsCount += 100;
-
         }
-        if (targetCell.gameElement === GLUE){
+        if (targetCell.gameElement === GLUE) {
             gStepsCount += 5;
-         
-            gIsGlue = true;
 
+            gIsGlue = true;
         }
 
+        if (targetCell.gameElement === MAGNET) gIsMagnet = true;
 
         gStepsCount++
         document.querySelector('.steps span').innerText = gStepsCount;
-      
+
         gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
 
         renderCell(gGamerPos, '');
-
 
         gGamerPos.i = i;
         gGamerPos.j = j;
@@ -225,7 +223,7 @@ function moveTo(i, j, direction) {
         renderCell(gGamerPos, GAMER_IMG);
 
     }
-
+    checkIfGameOver();
 }
 
 function renderCell(location, value) {
@@ -239,7 +237,7 @@ function handleKey(event) {
 
     var i = gGamerPos.i;
     var j = gGamerPos.j;
-    saveCurrGboard();
+    // saveCurrGboard();
 
 
     switch (event.key) {
@@ -266,30 +264,29 @@ function getClassName(location) {
     return cellClass;
 }
 
-function saveCurrGboard() {
-    gPrevSteps.push(gBoard);
-    // console.log('gPrevSteps', gPrevSteps);
-}
-
-function undo() {
-    gPrevSteps.pop();
-    var prevBoard= gPrevSteps.pop();
-    console.log('prevBoard', prevBoard);
-    // renderBoard(prevBoard)
-}
 
 
-function clearAllItntervals(){
+function clearAllItntervals() {
     clearInterval(gClockInterval);
     clearInterval(gGoldInterval);
-    clearInterval(gGlueInterval)
+    clearInterval(gGlueInterval);
+    clearInterval(gMagnetInterval);
 
+}
+
+function checkIfGameOver() {
+    var counter = 0;
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            var cell = gBoard[i][j];
+            if (cell.gameElement === BOX && cell.type === TARGET) counter++;
+        }
+    }
+    if (counter === 4) gameOver();
 }
 
 function gameOver() {
-    console.log('Game Over');
-    //clear all Intervals
-
+    clearAllItntervals()
     document.querySelector('.steps span').innerText += ' | GAME OVER |';
     gIsGameOn = false;
 }

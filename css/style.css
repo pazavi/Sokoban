@@ -81,7 +81,8 @@ table {
 .undo {
     font-family: 'Armata'; 
     width: 200px; 
-    height: 30px; 
+    height: 30px;
+    opacity: .4; 
     margin: 0 auto; 
     margin-top: 20px;
     display: block; 
