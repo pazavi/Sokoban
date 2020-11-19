@@ -1,15 +1,18 @@
+'use strict'
 const WALL = 'WALL';
 const FLOOR = 'FLOOR';
 const BOX = 'BOX';
 const GAMER = 'GAMER';
 const TARGET = 'TARGET';
-const CLOCK = 'TARGET';
+const CLOCK = 'CLOCK';
+const GOLD = 'CLOCK';
 
 
 
 const GAMER_IMG = '<img src="img/gamer-purple.png" />';
 const BOX_IMG = '<img src="img/box.jpg" />';
 const CLOCK_IMG = '<img src="img/clock.png" />';
+const GOLD_IMG = '<img src="img/gold.png" />';
 
 
 
@@ -26,40 +29,21 @@ var gBoxPos = { i: 0, j: 0 };
 var gIsGameOn;
 
 function initGame() {
+    clearAllItntervals()
     gIsGameOn = true;
     gStepsCount = 0;
 
     gGamerPos = { i: 2, j: 9 };
     gBoard = buildBoard();
     renderBoard(gBoard);
-
-    // gClockInterval= setInterval(summonBonusAtRandPos, 10000, CLOCK )
+    gClockInterval= setInterval(summonClockAtRandPos, 10000);
+    gGoldInterval= setInterval(summonGoldAtRandPos, 10000);
+    
     document.querySelector('.steps').innerHTML = 'Steps: <span>0</span>';
 
 }
 
-function summonBonusAtRandPos(bonusGameElement) {
-    var emptyCoord = getRandEmptyCell();
-    if (emptyCoord) {
-        gBoard[emptyCoord.i][emptyCoord.j].gameElement = bonusGameElement;
-   
-        renderCell(emptyCoord, '');
-    }
-}
 
-function getRandEmptyCell() {
-
-    do {
-        var idxI = getRandomInt(1, gBoard.length - 1);
-        var idxJ = getRandomInt(1, gBoard[0].length - 1);
-        if (gBoard[idxI][idxJ].gameElement === null) {
-            return { i: idxI, j: idxJ }
-        }
-        // if  return null
-
-    } while (true);
-
-}
 
 
 function buildBoard() {
@@ -103,7 +87,7 @@ function buildBoard() {
 
 
 
-    console.log(board);
+    // console.log(board);
     return board;
 }
 
@@ -131,6 +115,8 @@ function renderBoard(board) {
                 strHTML += GAMER_IMG;
             } else if (currCell.gameElement === BOX) {
                 strHTML += BOX_IMG;
+            }else if (currCell.gameElement === CLOCK) {
+                strHTML += CLOCK_IMG;
             }
 
             strHTML += '\t</td>\n';
@@ -196,6 +182,15 @@ function moveTo(i, j, direction) {
             gBoard[gBoxPos.i][gBoxPos.j].gameElement = BOX;
             renderCell(gBoxPos, BOX_IMG);
         }
+        if (targetCell.gameElement === CLOCK){
+            gStepsCount -= 11;
+
+        }
+        if (targetCell.gameElement === GOLD){
+            gStepsCount -= 101;
+
+        }
+
 
         gStepsCount++
         document.querySelector('.steps span').innerText = gStepsCount;
@@ -270,7 +265,11 @@ function undo() {
 }
 
 
+function clearAllItntervals(){
+    clearInterval(gClockInterval);
+    clearInterval(gGoldInterval);
 
+}
 
 function gameOver() {
     console.log('Game Over');
