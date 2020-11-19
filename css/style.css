@@ -1,0 +1,102 @@
+body {
+    background-color: black; 
+    color:white;
+}
+
+h1 {
+    font-family: 'Armata'; 
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+    border:0px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    
+}
+
+.steps {
+    font-family: 'Armata'; 
+    width: 528px; 
+    height: 28px; 
+    margin: 0 auto; 
+    margin-bottom: 20px; 
+    text-align: center; 
+    font-size: 22px; 
+    color:  #A5A529; 
+    background-color: black;
+}
+
+.steps span {
+    color:white;
+}
+
+.cell {
+    width:40px; 
+    height:40px;
+    text-align: center;
+}
+.cell img {
+    width:33px; 
+    height:auto;
+    margin: auto;
+    margin-top: 2px;
+    opacity: unset;
+}
+.floor {
+    background-color: gray
+}
+.wall {
+    background-color: brown
+}
+
+.target {
+    background-color: #A5A529;
+    /* background-image: url(../img/target.png); */
+    background-repeat: no-repeat;
+    opacity: 0.6;
+   
+ 
+}
+.undo {
+    font-family: 'Armata'; 
+    width: 200px; 
+    height: 30px; 
+    margin: 0 auto; 
+    margin-top: 20px;
+    display: block; 
+    text-align: center; 
+    font-size: 20px; 
+    color:  white; 
+    background-color: #A5A529;
+    outline: none; 
+    border: 0px; 
+    border-radius: 12px;
+}
+.undo:hover {
+    background-color: #63621A;
+}
+
+.Restart {
+    font-family: 'Armata'; 
+    width: 200px; 
+    height: 30px; 
+    margin: 0 auto; 
+    margin-top: 20px;
+    display: block; 
+    text-align: center; 
+    font-size: 20px; 
+    color:  white; 
+    background-color: #A5A529;
+    outline: none; 
+    border: 0px; 
+    border-radius: 12px;
+}
+
+.Restart:hover {
+    background-color: #63621A;
+}
+
+
+

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Sokoban</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet'>
+</head>
+
+<body onkeyup="handleKey(event)" onload="initGame()">
+  <h1>Sokoban</h1>
+  <div class="steps">Steps: <span>0</span></div>
+  <table>
+    <tbody class="board"></tbody>
+  </table>
+
+  <button class="undo" onclick="undo()">Undo</button>
+  <button class="Restart" onclick="initGame()">Restart</button>
+
+  <script src="js/util.js"></script>
+  <script src="js/app.js"></script>
+  
+</body>
+
+</html>
