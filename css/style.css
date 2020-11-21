@@ -22,7 +22,7 @@ table {
     height: 28px;
     display: block; 
     margin: auto; 
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
     text-align: center; 
     font-size: 22px; 
     color:  #A5A529; 
@@ -33,22 +33,18 @@ table {
     color:white;
 }
 
-.score {
+
+.message {
     font-family: 'Armata'; 
     width: 528px; 
-    height: 28px;
-    display: block;
-
+    height: 24px;
+    display: block; 
     margin: auto; 
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
     text-align: center; 
-    font-size: 22px; 
+    font-size: 18px; 
     color:  #A5A529; 
     background-color: black;
-}
-
-.score span {
-    color:white;
 }
 
 .cell {

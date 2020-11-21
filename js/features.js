@@ -1,11 +1,15 @@
 'use strict'
+var gClockTimeOut;
+var gGoldTimeOut;
+var gGlueTimeOut;
+var gMagnetTimeOut;
 
 function summonClockAtRandPos() {
     var emptyCoord = getRandEmptyCell();
     if (emptyCoord) {
         gBoard[emptyCoord.i][emptyCoord.j].gameElement = CLOCK;
         renderCell(emptyCoord, CLOCK_IMG);
-        setTimeout(function () {
+        gClockTimeOut  = setTimeout(function () {
             gBoard[emptyCoord.i][emptyCoord.j].gameElement = null;
             renderCell(emptyCoord, '');
 
@@ -18,7 +22,7 @@ function summonGoldAtRandPos() {
     if (emptyCoord) {
         gBoard[emptyCoord.i][emptyCoord.j].gameElement = GOLD;
         renderCell(emptyCoord, GOLD_IMG);
-        setTimeout(function () {
+        gGoldTimeOut =setTimeout(function () {
             gBoard[emptyCoord.i][emptyCoord.j].gameElement = null;
             renderCell(emptyCoord, '');
 
@@ -32,10 +36,10 @@ function summonGlueAtRandPos() {
         gBoard[emptyCoord.i][emptyCoord.j].gameElement = GLUE;
         renderCell(emptyCoord, GLUE_IMG);
 
-        setTimeout(function () {
+        gGlueTimeOut =setTimeout(function () {
             gBoard[emptyCoord.i][emptyCoord.j].gameElement = null;
             renderCell(emptyCoord, '');
-            gIsGlue = false;
+            
 
         }, 5000);
     }
@@ -46,8 +50,8 @@ function summonMagnetAtRandPos() {
     if (emptyCoord) {
         gBoard[emptyCoord.i][emptyCoord.j].gameElement = MAGNET;
         renderCell(emptyCoord, MAGNET_IMG);
-        gIsMagnet = true;
-        setTimeout(function () {
+       
+        gMagnetTimeOut= setTimeout(function () {
             gBoard[emptyCoord.i][emptyCoord.j].gameElement = null;
             renderCell(emptyCoord, '');
 
@@ -70,14 +74,13 @@ function getRandEmptyCell() {
     } while (true);
 
 }
-// function saveCurrGboard() {
-//     gPrevSteps.push(gBoard);
-//     // console.log('gPrevSteps', gPrevSteps);
-// }
+function saveCurrGboard() {
+    gPrevSteps.push(gBoard);
+    // console.log('gPrevSteps', gPrevSteps);
+}
 
-// function undo() {
-//     gPrevSteps.pop();
-//     var prevBoard = gPrevSteps.pop();
-//     console.log('prevBoard', prevBoard);
-//     renderBoard(prevBoard);
-// }
+function undo() {
+    var prevBoard = gPrevSteps.slice(gPrevSteps.length-2, gPrevSteps.length-1);
+    // console.log('prevBoard', prevBoard);
+    // renderBoard(prevBoard);
+}
