@@ -36,7 +36,7 @@ table {
 
 .message {
     font-family: 'Armata'; 
-    width: 528px; 
+    width: 850px; 
     height: 24px;
     display: block; 
     margin: auto; 
@@ -111,6 +111,26 @@ table {
 }
 
 .Restart:hover {
+    background-color: #63621A;
+}
+
+.manual {
+    font-family: 'Armata'; 
+    width: 200px; 
+    height: 30px; 
+    margin: 0 auto; 
+    margin-top: 20px;
+    display: block; 
+    text-align: center; 
+    font-size: 20px; 
+    color:  white; 
+    background-color: #A5A529;
+    outline: none; 
+    border: 0px; 
+    border-radius: 12px;
+}
+
+.manual:hover {
     background-color: #63621A;
 }
 

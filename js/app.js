@@ -44,6 +44,7 @@ function initGame() {
     setAllIntervals();
 
     document.querySelector('.steps').innerHTML = 'Score: <span>0</span>';
+    document.querySelector('.message').innerText = 'Better Push those Boxes!'
 
 }
 
@@ -52,7 +53,7 @@ function initGame() {
 
 function buildBoard() {
 
-    var board = createMat(10, 12)
+    var board = createMat(10, 12);
 
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[0].length; j++) {
@@ -83,17 +84,17 @@ function buildBoard() {
     while (innerWallsNum > 0) {
         var idxI = getRandomInt(1, board.length - 1);
         var idxJ = getRandomInt(1, board[0].length - 1);
-        if (board[idxI][idxJ].gameElement === null && 
-            board[idxI][idxJ].type === FLOOR && 
-            board[idxI][idxJ+1].gameElement !== BOX && 
-            board[idxI][idxJ-1].gameElement !== BOX &&
-            board[idxI-1][idxJ].gameElement !== BOX &&
-            board[idxI+1][idxJ].gameElement !== BOX &&
-            board[idxI][idxJ+1].type !== TARGET && 
-            board[idxI][idxJ-1].type !== TARGET &&
-            board[idxI-1][idxJ].type !== TARGET &&
-            board[idxI+1][idxJ].type !== TARGET
-            ) {
+        if (board[idxI][idxJ].gameElement === null &&
+            board[idxI][idxJ].type === FLOOR &&
+            board[idxI][idxJ + 1].gameElement !== BOX &&
+            board[idxI][idxJ - 1].gameElement !== BOX &&
+            board[idxI - 1][idxJ].gameElement !== BOX &&
+            board[idxI + 1][idxJ].gameElement !== BOX &&
+            board[idxI][idxJ + 1].type !== TARGET &&
+            board[idxI][idxJ - 1].type !== TARGET &&
+            board[idxI - 1][idxJ].type !== TARGET &&
+            board[idxI + 1][idxJ].type !== TARGET
+        ) {
             board[idxI][idxJ].type = WALL;
             innerWallsNum--
         }
@@ -120,7 +121,7 @@ function renderBoard(board) {
 
 
             strHTML += '\t<td class="cell ' + cellClass +
-                '"onclick="moveTo(' + i + ',' + j + ')" ' + '"onmouseup="saveCurrGboard()" >\n';
+                '"onclick="moveTo(' + i + ',' + j + ')" ' + '" oncontextmenu="elementPos(this, ' + i + ', ' + j + '); return false;" >\n';
 
 
             if (currCell.gameElement === GAMER) {
@@ -146,7 +147,6 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML;
 }
 
-// **********
 function moveTo(i, j, direction) {
     if (gIsGameOn === false) return;
     if (gIsGlue === true) return;
@@ -169,20 +169,20 @@ function moveTo(i, j, direction) {
     }
     if (targetCell.type === WALL) return;
 
-    if (gIsMagnet === true) {
-        if (direction === 'left') {
+    // if (gIsMagnet === true) {
+    //     if (direction === 'left') {
 
-            if (gBoard[gGamerPos.i][gGamerPos.j + 1].gameElement === BOX) {
-                console.log('magnet to left');
-                // renderCell(gBoxPos, '');
-                gBoxPos.i = i;
-                gBoxPos.j = j - 1;
-                gIsMagnet = false;
-                gBoard[gBoxPos.i][gBoxPos.j].gameElement = BOX;
-                renderCell(gBoxPos, BOX_IMG);
-            }
-        }
-    }
+    //         if (gBoard[gGamerPos.i][gGamerPos.j + 1].gameElement === BOX) {
+    //             console.log('magnet to left');
+    //             // renderCell(gBoxPos, '');
+    //             gBoxPos.i = i;
+    //             gBoxPos.j = j - 1;
+    //             gIsMagnet = false;
+    //             gBoard[gBoxPos.i][gBoxPos.j].gameElement = BOX;
+    //             renderCell(gBoxPos, BOX_IMG);
+    //         }
+    //     }
+    // }
 
     if (targetCell.gameElement === BOX) {
 
@@ -220,13 +220,13 @@ function moveTo(i, j, direction) {
     if (targetCell.gameElement === CLOCK) {
         clearTimeout(gClockTimeOut);
         gStepsCount -= 10;
-        document.querySelector('.message').innerText ='Clock collected. You got 10 free steps'
+        document.querySelector('.message').innerText = 'Clock collected. You got 10 free steps'
 
     }
     if (targetCell.gameElement === GOLD) {
         clearTimeout(gGoldTimeOut);
         gStepsCount += 100;
-        document.querySelector('.message').innerText ='Gold collected. 100 Points added to your score'
+        document.querySelector('.message').innerText = 'Gold collected. 100 Points added to your score'
     }
     if (targetCell.gameElement === GLUE) {
         gStepsCount += 5;
@@ -235,7 +235,7 @@ function moveTo(i, j, direction) {
             gIsGlue = false;
         }, 5000);
         clearTimeout(gGlueTimeOut)
-        document.querySelector('.message').innerText ='Steped on glue. You are stuck for 5 seconds'
+        document.querySelector('.message').innerText = 'Steped on glue. You are stuck for 5 seconds'
 
 
     }
@@ -243,13 +243,13 @@ function moveTo(i, j, direction) {
     if (targetCell.gameElement === MAGNET) {
         clearTimeout(gMagnetTimeOut);
         gIsMagnet = true;
-        document.querySelector('.message').innerText ='Magnet collected. You can pull a box from the wall once'
+        document.querySelector('.message').innerText = 'Magnet collected. You can pull a box from the wall once'
     }
 
     gStepsCount++
     document.querySelector('.steps span').innerText = gStepsCount;
 
-    gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;//** */
+    gBoard[gGamerPos.i][gGamerPos.j].gameElement = null;
 
     renderCell(gGamerPos, '');
 
@@ -258,7 +258,6 @@ function moveTo(i, j, direction) {
 
     renderCell(gGamerPos, GAMER_IMG);
 
-    // saveCurrGboard()
     checkIfGameOver();
 }
 
@@ -329,7 +328,7 @@ function checkIfGameOver() {
 function gameOver() {
     clearAllItntervals()
     document.querySelector('.steps span').innerText += ' | GAME OVER |';
-    document.querySelector('.message').innerText ='All Boxes on targets'
+    document.querySelector('.message').innerText = 'All Boxes on targets'
     gIsGameOn = false;
 }
 
